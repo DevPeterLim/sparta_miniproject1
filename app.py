@@ -53,13 +53,8 @@ def edit_comment():
     comment_list = blog_info['comments']  # 블로그 찾고 해당 comment 리스트 가져오기
     bf_comments = comment_list[int(listNum_receive)]
     edit_receive = request.form['edit_comment_give']
-    print(comment_list)
 
     bf_comments.update({'comment': edit_receive})
-
-    print(comment_list)
-
-    print(bf_comments)
 
     db.blogs.update_one({'_id': ObjectId(id_receive)}, {'$set': {'comments': comment_list}})
 
@@ -68,11 +63,14 @@ def edit_comment():
 @app.route('/edit_blog', methods=['POST'])
 def edit_blog():
     id_receive = request.form['id_give']  # 해당 블로그 '_id'
+    summary_receive = request.form['summary_give']
     text_receive = request.form['text_give']
 
-    db.blogs.update_one({'_id': ObjectId(id_receive)}, {'$set': {'summary': text_receive}})
+    db.blogs.update_one({'_id': ObjectId(id_receive)}, {'$set': {'summary': summary_receive}})
+    db.blogs.update_one({'_id': ObjectId(id_receive)}, {'$set': {'text': text_receive}})
 
     return jsonify({'msg': '수정완료!'})
+
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
     # 로그인
@@ -187,6 +185,7 @@ def save_blogg():
         text_receive = request.form['text_give']
         summary_receive = request.form['summary_give'] # ajax로 받은 데이터, 블로그 url, 요약, 추가 날짜
         comment_receive = [] # 댓글 추가 할 빈 리스트
+        like_receive = []
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
         data = requests.get(url_receive, headers=headers)
 
@@ -200,7 +199,8 @@ def save_blogg():
                 'url': url_receive,
                 'summary': summary_receive,
                 'text': text_receive,
-                'comments': comment_receive
+                'comments': comment_receive,
+                'like': like_receive
             }
             db.blogs.insert_one(doc)
             return jsonify({'msg': '저장 완료 !!'})
@@ -212,7 +212,8 @@ def save_blogg():
                 'url': url_receive,
                 'summary': summary_receive,
                 'text': text_receive,
-                'comments': comment_receive
+                'comments': comment_receive,
+                'like': like_receive
             }
             db.blogs.insert_one(doc)
             return jsonify({'msg': '저장 완료 !!'})
@@ -275,18 +276,18 @@ def update_like():
         # 좋아요 수 변경
         user_info = db.users.find_one({"username": payload["id"]})
         id_receive = request.form["_id_give"]
-        type_receive = request.form["type_give"]
         action_receive = request.form["action_give"]
-        doc = {
-            "post_id": id_receive,
-            "username": user_info["username"],
-            "type": type_receive
-        }
+
+        blog_info = db.blogs.find_one({"_id": ObjectId(id_receive)})
+        like_list = blog_info['like']
+
         if action_receive == "like":
-            db.likes.insert_one(doc)
+            like_list.append(user_info['username'])
+            db.blogs.update_one({'_id': ObjectId(id_receive)}, {'$set': {'like': like_list}})
         else:
-            db.likes.delete_one(doc)
-        count = db.likes.count_documents({"post_id": id_receive, "type": type_receive})
+            like_list.remove(user_info['username'])
+            db.blogs.update_one({'_id': ObjectId(id_receive)}, {'$set': {'like': like_list}})
+        count = len(like_list)
         return jsonify({"result": "success", 'msg': 'updated', "count": count})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))

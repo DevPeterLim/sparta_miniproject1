@@ -15,6 +15,9 @@
 
     <title> 스킬 아카이브 </title>
     <link rel="stylesheet" href="../static/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 </head>
 <script>
     function logout() {
@@ -66,16 +69,17 @@
         $("#modal-edit").addClass("is-active");
         {#let num = $(`#${com_num}`).text()#}
         {#$("#textarea-post").val(num)#}
-        $("#chg_btn").attr('onclick',`edit_blog('${com_num}')`)
+        $("#chg_btn").attr('onclick', `edit_blog('${com_num}')`)
     }
-    function edit_blog(id){
-        let text = $("#textarea-post").val()
-        console.log(id)
-        console.log(text)
+
+    function edit_blog(id) {
+        let summary = $("#textarea-post1").val()
+        let text = $("#textarea-post2").val()
+
         $.ajax({
             type: "POST",
             url: "/edit_blog",
-            data: {id_give: id, text_give: text},
+            data: {id_give: id, summary_give: summary, text_give: text},
             success: function (response) { //{'msg': '수정 완료 !!'}
                 alert(response['msg'])
                 window.location.reload()
@@ -87,10 +91,10 @@
 <div class="mytitle">
     <h1>스킬 아카이브</h1>
     <div class="info_box">
-        <p>안녕하세요 {{ id }}님 </p>
+        <p>안녕하세요 <span style="color: skyblue">{{ id }} </span> 님 </p>
         <button type="button" class="btn btn-dark" onclick="logout()">로그아웃</button>
     </div>
-    <button class="btn btn-dark btn_1" onclick="open_save()">블로그 추가하기</button>
+    <button class="btn btn-light" onclick="open_save()">블로그 추가하기</button>
 </div>
 
 <div id="all_box">
@@ -103,17 +107,22 @@
                         </div>
                     </a>
                     <div class="text_box">
-                        <a href="/searchblog/{{ blog._id }}" taget="_blank"><p>{{ blog.summary }}</p></a>
+                        <a href="/searchblog/{{ blog._id }}" taget="_blank"><p
+                                class="txt_summary">{{ blog.summary }}</p></a>
                         <div class="blog_comment">
                             <span>{{ blog.username }}</span>
-                            <span>댓글 {{ count_list[loop.index0] }}개</span>
+                            <span>댓글 ) {{ count_list[loop.index0] }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="button_box">
                     <!-- 조건문을 사용해서 사용자가 맞을 경우만 표시 -->
-                    <button class="btn_3" onclick="modal('{{ blog._id }}')">수정</button>
-                    <button class="btn_3" onclick="del_blog('{{ blog._id }}')">삭제</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="modal('{{ blog._id }}')">
+                        수정
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="del_blog('{{ blog._id }}')">
+                        삭제
+                    </button>
                 </div>
             </div>
         {% else %}
@@ -124,10 +133,11 @@
                         </div>
                     </a>
                     <div class="text_box">
-                        <a href="/searchblog/{{ blog._id }}" taget="_blank"><p>{{ blog.summary }}</p></a>
+                        <a href="/searchblog/{{ blog._id }}" taget="_blank"><p
+                                class="txt_summary">{{ blog.summary }}</p></a>
                         <div class="blog_comment">
                             <span>{{ blog.username }}</span>
-                            <span>댓글 {{ count_list[loop.index0] }}개</span>
+                            <span>댓글 ) {{ count_list[loop.index0] }}</span>
                         </div>
                     </div>
                 </div>
@@ -163,9 +173,16 @@
         <div class="box">
             <article class="media">
                 <div class="media-content">
+                    <p>제목</p>
                     <div class="field">
                         <p class="control">
-                            <textarea id="textarea-post" class="textarea"></textarea>
+                            <textarea id="textarea-post1" class="textarea"></textarea>
+                        </p>
+                    </div>
+                    <p>상세 설명</p>
+                    <div class="field">
+                        <p class="control">
+                            <textarea id="textarea-post2" class="textarea"></textarea>
                         </p>
                     </div>
                     <nav class="level is-mobile">

@@ -8,12 +8,16 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
     <!--JQUREY 임포트 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <title> 스킬 아카이브 </title>
     <link rel="stylesheet" href="../static/detailBlog.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 </head>
 <script>
     function save_comment(a) {
@@ -51,6 +55,10 @@
         window.location.href = '/login'
     }
 
+    function back() {
+        window.location.href = '/'
+    }
+
     function edit_comment(b) {
         const listNum = b; // 댓글 번호
         const id = '{{blog._id}}' // 블로그 id값
@@ -79,9 +87,10 @@
 <div class="mytitle">
     <h1>스킬 아카이브</h1>
     <div class="info_box">
-        <p>안녕하세요 {{ id }}님 </p>
+        <p>안녕하세요 <span style="color: skyblue">{{ id }} </span> 님 </p>
         <button type="button" class="btn btn-dark" onclick="logout()">로그아웃</button>
     </div>
+    <button class="btn btn-light" onclick="back()">LIST로 돌아가기</button>
 </div>
 
 <div id="all_content">
@@ -164,7 +173,6 @@
 </div>
 </body>
 </html>
-
 
 
 

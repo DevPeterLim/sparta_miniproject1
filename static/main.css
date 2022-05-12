@@ -1,3 +1,6 @@
+*{
+    font-family: 'Jua', sans-serif;
+}
 .mypost {
     width: 95%;
     max-width: 500px;
@@ -45,15 +48,20 @@
 .mytitle > button {
     color: black;
 }
+.mytitle>h1 {
+    font-size: 40px;
+    font-weight: bolder;
+}
 
 .all_box {
-    border: 1px solid #000;
-    max-width: 1200px;
+    border: 1px solid #ccc;
+    max-width: 1000px;
     margin: 0 auto;
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
     padding: 10px 50px;
+    border-radius: 70px 20px;
 }
 
 .content_box {
@@ -78,6 +86,9 @@
 
 .text_box {
     width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .button_box {
@@ -99,7 +110,11 @@
 .image_box  {
     width: 100px;
     height: 100px;
-    border: 1px solid #000;
-    background-size: cover;
+        background-size: cover;
     background-repeat: no-repeat;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.txt_summary{
+    padding-left: 55px;
 }
