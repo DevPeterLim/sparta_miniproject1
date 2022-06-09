@@ -14,7 +14,7 @@ from bson.objectid import ObjectId
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 # 아래 URL을 본인의 몽고DBURL로 변경후 test 해주세요
-mongodburl = 'mongodb+srv://test:sparta@Cluster0.faljs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+mongodburl = '몽고 DB'
 client = MongoClient(mongodburl)
 db = client.dbsparta_plus_miniproject_real
 
